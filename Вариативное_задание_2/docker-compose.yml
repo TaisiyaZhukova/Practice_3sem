@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  # Наш бот
+  bot:
+    build: .
+    container_name: echo_bot_container
+    restart: always
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_NAME=bot_db
+      - DB_USER=user
+      - DB_PASSWORD=password
+
+  # База данных (та самая "обвязка" для хранения сообщений)
+  db:
+    image: postgres:15
+    container_name: bot_database
+    restart: always
+    environment:
+      - POSTGRES_DB=bot_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
